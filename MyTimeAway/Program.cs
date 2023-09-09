@@ -20,7 +20,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IEmployeeLeaveRepository, EmployeeLeaveRepository>();
 builder.Services.AddScoped<IEmployeeLeaveService, EmployeeLeaveService>();
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+         .AllowAnyHeader()
+         .AllowAnyMethod();
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,7 +37,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseStaticFiles();
+app.UseCors();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
